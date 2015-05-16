@@ -8,9 +8,7 @@
 #include "sys/error.h"
 
 #if SUNDOWN_OS_POSIX
-#  include "sys/posix/sys_impl.h"
 #elif SUNDOWN_OS_WIN32
-#  include "sys/win32/sys_impl.h"
 #else
 #  error "Unknown OS"
 #endif
