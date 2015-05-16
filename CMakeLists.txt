@@ -3,8 +3,10 @@ cmake_minimum_required(VERSION 2.8)
 project(sundown)
 
 if(UNIX)
+    set(SUNDOWN_OS_POSIX TRUE)
     add_definitions(-DSUNDOWN_OS_POSIX)
 elseif(WIN32)
+    set(SUNDOWN_OS_WIN32 TRUE)
     add_definitions(-DSUNDOWN_OS_WIN32)
 endif()
 
