@@ -1,0 +1,19 @@
+#ifndef SUNDOWN_SYS_H
+#define SUNDOWN_SYS_H
+
+#include <cstdint>
+#include <cassert>
+
+#include "sys/resource.h"
+#include "sys/error.h"
+
+#if SUNDOWN_OS_POSIX
+#  include "sys/posix/sys_impl.h"
+#elif SUNDOWN_OS_WIN32
+#  include "sys/win32/sys_impl.h"
+#else
+#  error "Unknown OS"
+#endif
+
+#endif // SUNDOWN_SYS_H
+
