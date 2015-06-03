@@ -4,8 +4,7 @@
 #include <cstdint>
 #include <cassert>
 
-#include "sys/resource.h"
-#include "sys/error.h"
+#include "sys/fd.h"
 
 #if SUNDOWN_OS_POSIX
 #elif SUNDOWN_OS_WIN32

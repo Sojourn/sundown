@@ -1,10 +1,11 @@
 set(SYS_HDRS
     sys.h
-    resource.h
+    fd.h
 )
 
 set(SYS_SRCS
     sys.cpp
+    fd.cpp
 )
 
 if(SUNDOWN_OS_POSIX)
