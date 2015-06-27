@@ -11,7 +11,7 @@ elseif(WIN32)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-    list(APPEND CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
+    list(APPEND CMAKE_CXX_FLAGS "-g -std=c++0x ${CMAKE_CXX_FLAGS}")
 endif()
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
