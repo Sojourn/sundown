@@ -3,37 +3,23 @@
 #include <vector>
 #include <tuple>
 #include <array>
+#include <string>
+#include <stdexcept>
 
 #include <cassert>
 #include <cstdint>
+#include <cstdio>
 
+#include "util/util.h"
 #include "sys/sys.h"
 
 using namespace Sundown;
 
-class Item : public SelectorItem
+int main(int argc, char **argv)
 {
-public:
-    Item(FileDescriptor fd)
-        : SelectorItem(std::move(fd))
-    {
-    }
-};
+    Option<std::string> o("What is up ma niggas hahahahahdfdslfj lasdjf lakjflkasjdf;l jasd;lkfj as;dlkfj a;sldj");
+    std::cout << o.value() << std::endl;
 
-int main(int argc, char **argv) {
-    Selector selector;
-    selector.add(std::make_shared<Item>(dup(0)), Selector::Readable);
-
-    for (const SelectorEvent &event: selector.select()) {
-        char buffer[32];
-
-        if (event.readable()) {
-            int len = read(event.item()->fd().get(), buffer, sizeof(buffer));
-            assert(len > 0);
-
-            std::cout << buffer << std::endl;
-        }
-    }
 
     return 0;
 }

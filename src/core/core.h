@@ -4,9 +4,15 @@
 #include <tuple>
 #include <vector>
 #include <memory>
+#include <atomic>
 
-namespace Sundown {
-}
+#include <cstring>
+#include <cstdint>
+#include <cstddef>
+#include <cassert>
+
+#include "sys/sys.h"
+#include "mem/mem.h"
 
 #endif // SUNDOWN_CORE_H
 

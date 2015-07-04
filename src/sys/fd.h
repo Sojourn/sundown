@@ -17,6 +17,7 @@ namespace Sundown {
         int get() const;
         bool empty() const;
         void reset(int fd = -1);
+        int release();
 
     private:
         int fd_;

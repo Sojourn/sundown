@@ -45,13 +45,23 @@ namespace Sundown {
             Writable = (1 << 1),
         };
 
-        Selector();
+        static Option<Selector> create();
+
+        Selector(const Selector &) = delete;
+        Selector(Selector &&) = default;
+
+        Selector &operator=(const Selector &) = delete;
+        Selector &operator=(Selector &&) = default;
+        
 
         void add(const SelectorItem::SP &item, Events events);
         void modify(const SelectorItem::SP &item, Events events);
         void remove(const SelectorItem::SP &item);
 
         Range<const SelectorEvent *> select();
+
+    protected:
+        Selector(FileDescriptor epollFd);
 
     private:
         FileDescriptor epollFd_;

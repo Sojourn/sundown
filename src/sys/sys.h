@@ -16,6 +16,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/epoll.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -25,10 +27,11 @@
 #  error "Unknown OS"
 #endif
 
-#include "util/range.h"
+#include "util/util.h"
 
 #include "sys/fd.h"
 #include "sys/selector.h"
+#include "sys/reflector.h"
 
 #endif // SUNDOWN_SYS_H
 

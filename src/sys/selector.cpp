@@ -46,12 +46,20 @@ bool SelectorEvent::error() const
     return event_.events & EPOLLERR;
 }
 
-Selector::Selector()
+Option<Selector> Selector::create()
 {
-    epollFd_.reset(epoll_create1(EPOLL_CLOEXEC));
-    if (epollFd_.empty()) {
-        throw std::runtime_error("Selector failed to open epoll file descriptor");
+    FileDescriptor epollFd(epoll_create1(EPOLL_CLOEXEC));
+    if (epollFd.empty()) {
+        return Option<Selector>();
     }
+    else {
+        return Option<Selector>(Selector(std::move(epollFd)));
+    }
+}
+
+Selector::Selector(FileDescriptor epollFd)
+    : epollFd_(std::move(epollFd))
+{
 }
 
 void Selector::add(const SelectorItem::SP &item, Events events)

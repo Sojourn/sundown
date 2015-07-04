@@ -57,3 +57,11 @@ void FileDescriptor::reset(int fd)
 
     fd_ = fd;
 }
+
+int FileDescriptor::release()
+{
+    int fd = fd_;
+    fd_ = -1;
+    return fd;
+}
+

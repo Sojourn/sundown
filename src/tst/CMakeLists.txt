@@ -8,6 +8,7 @@ else()
 endif()
 
 target_link_libraries(tst sundown_mem)
+target_link_libraries(tst sundown_util)
 target_link_libraries(tst sundown_sys)
 target_link_libraries(tst sundown_core)
 
