@@ -10,13 +10,7 @@ namespace Sundown {
 
         virtual ~SelectorItem();
 
-        const FileDescriptor &fd() const;
-
-    protected:
-        SelectorItem(FileDescriptor &&fd);
-
-    private:
-        FileDescriptor fd_;
+        virtual const FileDescriptor &fd() const = 0;
     };
 
     class SelectorEvent
@@ -45,7 +39,7 @@ namespace Sundown {
             Writable = (1 << 1),
         };
 
-        static Option<Selector> create();
+        static Optional<Selector> create();
 
         Selector(const Selector &) = delete;
         Selector(Selector &&) = default;

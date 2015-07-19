@@ -6,7 +6,8 @@ namespace Sundown {
     class Reflector
     {
     public:
-        Reflector(size_t size);
+        static Optional<Reflector> create(size_t size);
+
         Reflector(const Reflector &) = delete;
         Reflector(Reflector &&other);
         ~Reflector();
@@ -28,6 +29,7 @@ namespace Sundown {
         size_t size() const;
 
     private:
+        Reflector(FileDescriptor fd, void *addr, size_t size);
         void reset();
 
     private:

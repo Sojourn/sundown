@@ -4,7 +4,7 @@ set(UTIL_HDRS
     range.h
     string.h
     string_ref.h
-    option.h
+    optional.h
 )
 
 set(UTIL_SRCS

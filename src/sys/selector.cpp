@@ -2,18 +2,8 @@
 
 using namespace Sundown;
 
-SelectorItem::SelectorItem(FileDescriptor &&fd)
-    : fd_(std::move(fd))
-{
-}
-
 SelectorItem::~SelectorItem()
 {
-}
-
-const FileDescriptor &SelectorItem::fd() const
-{
-    return fd_;
 }
 
 SelectorItem::SP SelectorEvent::item() const
@@ -46,14 +36,15 @@ bool SelectorEvent::error() const
     return event_.events & EPOLLERR;
 }
 
-Option<Selector> Selector::create()
+Optional<Selector> Selector::create()
 {
     FileDescriptor epollFd(epoll_create1(EPOLL_CLOEXEC));
     if (epollFd.empty()) {
-        return Option<Selector>();
+        return Optional<Selector>();
     }
     else {
-        return Option<Selector>(Selector(std::move(epollFd)));
+        Selector selector(std::move(epollFd));
+        return Optional<Selector>(std::move(selector));
     }
 }
 

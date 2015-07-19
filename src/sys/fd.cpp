@@ -52,7 +52,6 @@ void FileDescriptor::reset(int fd)
     if (fd_ >= 0) {
         int sts = close(fd_);
         assert(sts >= 0);
-        
     }
 
     fd_ = fd;

@@ -2,57 +2,67 @@
 
 using namespace Sundown;
 
-Reflector::Reflector(size_t size)
-    : addr_(nullptr)
-    , size_(size)
+Optional<Reflector> Reflector::create(size_t size)
 {
-    static const char *path = "ring_buffer.shm";
-    void *resultAddr = nullptr;
-    int sts = 0;
+    static const char *path = "reflector.shm";
+    FileDescriptor fd;
+    void *lower = nullptr;
+    void *upper = nullptr;
+    void *both = nullptr;
+    int sts = -1;
 
     if ((size == 0) || (size % 4096)) {
-        throw std::runtime_error("invalid size");
+        return Optional<Reflector>();
     }
 
-    fd_.reset(shm_open(path, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR));
-    if (fd_.empty()) {
-        throw std::runtime_error("shm_open failed");
+    fd.reset(shm_open(path, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR));
+    if (fd.empty()) {
+        return Optional<Reflector>();
     }
 
     sts = shm_unlink(path);
     if (sts < 0) {
-        throw std::runtime_error("shm_unlink failed");
+        return Optional<Reflector>();
     }
 
-    sts = ftruncate(fd_.get(), size_);
+    sts = ftruncate(fd.get(), size);
     if (sts < 0) {
-        throw std::runtime_error("ftruncate failed");
+        return Optional<Reflector>();
     }
     
-    addr_ = mmap(nullptr, size_ * 2, PROT_READ | PROT_WRITE, MAP_SHARED, fd_.get(), 0);
-    if (addr_ == MAP_FAILED) {
-        throw std::runtime_error("ftruncate failed");
+    both = mmap(nullptr, size * 2, PROT_READ | PROT_WRITE, MAP_SHARED, fd.get(), 0);
+    if (both == MAP_FAILED) {
+        return Optional<Reflector>();
     }
 
-    resultAddr = mremap(addr_, size_ * 2, size_, 0);
-    if (resultAddr == MAP_FAILED) {
-        sts = munmap(addr_, size_ * 2);
+    lower = mremap(both, size * 2, size, 0);
+    if (lower == MAP_FAILED) {
+        sts = munmap(both, size * 2);
         assert(sts >= 0);
-        throw std::runtime_error("mremap failed");
+        return Optional<Reflector>();
     }
-    else if (resultAddr != addr_) {
-        sts = munmap(resultAddr, size_);
+    else if (lower != both) {
+        sts = munmap(lower, size);
         assert(sts);
-        throw std::runtime_error("mremap moved mapping");
+        return Optional<Reflector>();
     }
 
-    void *upperAddr = static_cast<uint8_t*>(addr_) + size_;
-    resultAddr = mmap(upperAddr, size_, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED, fd_.get(), 0);
-    if (resultAddr == MAP_FAILED) {
-        sts = munmap(addr_, size_);
+    upper = static_cast<uint8_t*>(lower) + size;
+    upper = mmap(upper, size, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED, fd.get(), 0);
+    if (upper == MAP_FAILED) {
+        sts = munmap(lower, size);
         assert(sts >= 0);
-        throw std::runtime_error("mmap failed");
+        return Optional<Reflector>();
     }
+
+    return Optional<Reflector>(Reflector(std::move(fd), lower, size));
+}
+
+Reflector::Reflector(FileDescriptor fd, void *addr, size_t size)
+    : addr_(addr)
+    , size_(size)
+    , fd_(std::move(fd))
+{
 }
 
 Reflector::Reflector(Reflector &&other)

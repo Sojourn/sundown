@@ -18,6 +18,7 @@
 #include <sys/epoll.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
+#include <sys/sendfile.h>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -30,8 +31,10 @@
 #include "util/util.h"
 
 #include "sys/fd.h"
+#include "sys/pipe.h"
 #include "sys/selector.h"
 #include "sys/reflector.h"
+#include "sys/stream_writer.h"
 
 #endif // SUNDOWN_SYS_H
 
