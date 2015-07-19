@@ -3,6 +3,8 @@
 
 namespace Sundown {
 
+    // Two adjacent pieces of virtual address space that map
+    // to the same physical memory.
     class Reflector
     {
     public:
