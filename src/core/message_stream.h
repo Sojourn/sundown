@@ -99,7 +99,7 @@ namespace Sundown {
         friend class MessageStreamWriter;
         friend class MessageStreamReader;
     public:
-        Optional<std::shared_ptr<MessageStream>> create(size_t capacity);
+        static Optional<std::shared_ptr<MessageStream>> create(size_t capacity);
 
         MessageStream(Reflector reflector);
         MessageStream(const MessageStream &) = delete;

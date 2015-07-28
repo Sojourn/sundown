@@ -10,3 +10,7 @@ set(CORE_SRCS
 
 add_library(sundown_core STATIC ${CORE_SRCS})
 
+target_link_libraries(sundown_core sundown_mem)
+target_link_libraries(sundown_core sundown_util)
+target_link_libraries(sundown_core sundown_sys)
+
