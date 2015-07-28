@@ -82,7 +82,7 @@ namespace Sundown {
         }
 
     private:
-        uint8_t SUNDOWN_ALIGN buffer_[sizeof(T)];
+        alignas(alignof(T)) uint8_t buffer_[sizeof(T)];
         bool empty_;
     };
 
