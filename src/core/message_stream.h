@@ -7,24 +7,12 @@ namespace Sundown {
     class MessageStreamWriter;
     class MessageStreamReader;
 
-    struct Slice
-    {
-        uint8_t *begin;
-        uint8_t *end;
-
-        Slice(uint8_t *first = nullptr, uint8_t *last = nullptr)
-            : begin(first)
-            , end(last)
-        {
-        }
-    };
-
     class Message
     {
-        friend class MessageWriter;
+        friend class MessageStreamWriter;
     public:
         Message();
-        Message(uint64_t begin, uint64_t end);
+        Message(uint64_t begin, uint64_t end, uint64_t size);
         Message(Message &&other);
         Message(const Message &) = delete;
         ~Message();
@@ -41,8 +29,8 @@ namespace Sundown {
     private:
         uint64_t begin_;
         uint64_t end_;
+        uint64_t size_;
     };
-
 
     class MessageStreamCursor
     {
@@ -71,13 +59,16 @@ namespace Sundown {
         MessageStreamWriter(std::shared_ptr<MessageStream> stream);
 
         Message claim(size_t size);
-        Optional<Slice> prepare(Message message);
+        Optional<Buffer> prepare(const Message &message);
         void commit(Message message);
+
+    private:
+        bool readyFast(const Message &message);
+        bool readySlow(const Message &message);
 
     private:
         MessageStreamCursor cursor_;
         uint64_t head_;
-        uint64_t tail_;
     };
 
     class MessageStreamReader
@@ -85,12 +76,15 @@ namespace Sundown {
     public:
         MessageStreamReader(std::shared_ptr<MessageStream> stream);
 
-        Optional<Slice> read();
+        Optional<Buffer> read();
+
+    private:
+        void clean();
 
     private:
         MessageStreamCursor cursor_;
-        uint64_t head_; // Start of next message
-        uint64_t tail_; // Start of dirty region
+        uint64_t head_;
+        uint64_t tail_;
     };
 
     class MessageStream

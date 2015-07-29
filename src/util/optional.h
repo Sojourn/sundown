@@ -81,6 +81,11 @@ namespace Sundown {
             return empty_;
         }
 
+        operator bool() const
+        {
+            return !empty_;
+        }
+
     private:
         alignas(alignof(T)) uint8_t buffer_[sizeof(T)];
         bool empty_;

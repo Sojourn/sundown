@@ -8,8 +8,7 @@
 #include <cstring>
 #include <cassert>
 
-namespace Sundown {
-}
+#include "buffer.h"
 
 #endif // SUNDOWN_MEM_H
 
