@@ -57,7 +57,9 @@ namespace Sundown {
         Optional<T> &operator=(Optional<T> &&rhs)
         {
             if (this != &rhs) {
-                get();
+                if (!empty()) {
+                    get();
+                }
 
                 if (!rhs.empty()) {
                     new(buffer_) T(rhs.get());
@@ -81,7 +83,7 @@ namespace Sundown {
             return empty_;
         }
 
-        operator bool() const
+        explicit operator bool() const
         {
             return !empty_;
         }

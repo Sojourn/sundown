@@ -1,11 +1,15 @@
-# Windows doesn't support symlinks?
-if(SUNDOWN_OS_POSIX)
-    add_executable(tst tst.cpp)
-elseif(SUNDOWN_OS_WIN32)
-    add_executable(tst src/tst.cpp)
-else()
-    message(STATUS "Ignoring tst target")
-endif()
+set(TST_HDRS
+)
+
+set(TST_SRCS
+    tst.cpp
+    util/tst_optional.cpp
+    util/tst_range.cpp
+    util/tst_string.cpp
+    util/tst_string_ref.cpp
+)
+
+add_executable(tst ${TST_SRCS})
 
 target_link_libraries(tst sundown_mem)
 target_link_libraries(tst sundown_util)
